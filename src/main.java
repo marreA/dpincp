@@ -11,7 +11,7 @@ public class main {
     //Constants
     public static void main(String[] args) throws IOException {
 
-        args = new String[]{"correlated", "15", "5000", "20", "10", "CPgoogle", "MIP", "DP", "DPinCPgoogle", "DPinCPgooglev3"};
+        //args = new String[]{"correlated", "15", "5000", "20", "10", "CPgoogle", "MIP", "DP", "DPinCPgoogle", "DPinCPgooglev3"};
         InstanceGenerator benchmark = new StronglyCorrelated();;
         switch(args[0]) {
             case "correlated" :
@@ -19,6 +19,7 @@ public class main {
                 break;
 
         }
+        int[] seeds = {1234, 1989, 290889, 251091, 240664, 190364, 120863, 101295, 31089, 3573113, 30994, 7153, 897332, 174714, 53550, 108109, 1942, 42, 6462, 2001};
         int n = Integer.valueOf(args[1]);
         int volume = Integer.valueOf(args[2]);
         int r = Integer.valueOf(args[3]);
@@ -94,7 +95,7 @@ public class main {
         for (int i = 0; i < r; i ++) {
 //            System.out.println("Repetition "+ (i + 1) + " of " + r);
             int solVal = 0;
-            benchmark.generate(n,volume);
+            benchmark.generate(n,volume, seeds[i]);
             weight = benchmark.getWeight();
             cost = benchmark.getCost();
             int v = benchmark.getVolume();

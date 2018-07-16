@@ -21,6 +21,6 @@ public abstract class InstanceGenerator {
     }
 
 
-    public abstract void generate(int n, int vol);
+    public abstract void generate(int n, int vol, int seed);
 
 }
