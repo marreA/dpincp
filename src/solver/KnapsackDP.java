@@ -14,6 +14,9 @@ public class KnapsackDP extends KnapsackSolver{
         weight = w;
         cost = c;
         volume = v;
+//        System.out.println(w.length);
+//        System.out.println(c.length);
+//        System.out.println(v);
         optimalValue = knapSack();
 
     }

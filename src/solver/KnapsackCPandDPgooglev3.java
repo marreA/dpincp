@@ -1,9 +1,6 @@
 package solver;
 
-import com.google.ortools.constraintsolver.DecisionBuilder;
-import com.google.ortools.constraintsolver.IntVar;
-import com.google.ortools.constraintsolver.SolutionCollector;
-import com.google.ortools.constraintsolver.Solver;
+import com.google.ortools.constraintsolver.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,12 +85,21 @@ public class KnapsackCPandDPgooglev3 extends KnapsackSolver{
         solCol.add(K[0][0]);
 
 
-        model.newSearch(db,solCol);
+        SearchMonitor tl = model.makeTimeLimit(timeLimit * 1000);
+        SearchMonitor[] sm = {solCol, tl};
+
+        model.newSearch(db,sm);
         model.nextSolution();
 
 //        System.out.println(K[0][0].value());
 
-        optimalValue = (int) K[0][0].value();
+
+        if(K[0][0].bound()) {
+            optimalValue = (int) K[0][0].value();
+        } else {
+            optimalValue = -1;
+        }
+
         model.endSearch();
 
 //        System.out.println("COunt " +count);

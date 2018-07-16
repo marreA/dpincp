@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_knapsackcp" default="compile.module.knapsackcp">
+  <dirname property="module.knapsackcp.basedir" file="${ant.file.module_knapsackcp}"/>
+  
+  <property name="module.jdk.home.knapsackcp" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.knapsackcp" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.knapsackcp" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.knapsackcp" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="knapsackcp.output.dir" value="${module.knapsackcp.basedir}/out/production/knapsackCP"/>
+  <property name="knapsackcp.testoutput.dir" value="${module.knapsackcp.basedir}/out/test/knapsackCP"/>
+  
+  <path id="knapsackcp.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="knapsackcp.module.production.classpath">
+    <path refid="${module.jdk.classpath.knapsackcp}"/>
+    <path refid="library.org.choco-solver:choco-solver:4.0.6.classpath"/>
+    <path refid="library.com.google.ortools.classpath"/>
+    <path refid="library.protobuf.classpath"/>
+  </path>
+  
+  <path id="knapsackcp.runtime.production.module.classpath">
+    <pathelement location="${knapsackcp.output.dir}"/>
+    <path refid="library.org.choco-solver:choco-solver:4.0.6.classpath"/>
+    <path refid="library.com.google.ortools.classpath"/>
+    <path refid="library.protobuf.classpath"/>
+  </path>
+  
+  <path id="knapsackcp.module.classpath">
+    <path refid="${module.jdk.classpath.knapsackcp}"/>
+    <pathelement location="${knapsackcp.output.dir}"/>
+    <path refid="library.org.choco-solver:choco-solver:4.0.6.classpath"/>
+    <path refid="library.com.google.ortools.classpath"/>
+    <path refid="library.protobuf.classpath"/>
+  </path>
+  
+  <path id="knapsackcp.runtime.module.classpath">
+    <pathelement location="${knapsackcp.testoutput.dir}"/>
+    <pathelement location="${knapsackcp.output.dir}"/>
+    <path refid="library.org.choco-solver:choco-solver:4.0.6.classpath"/>
+    <path refid="library.com.google.ortools.classpath"/>
+    <path refid="library.protobuf.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.knapsackcp">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.knapsackcp">
+    <patternset refid="excluded.from.module.knapsackcp"/>
+  </patternset>
+  
+  <path id="knapsackcp.module.sourcepath">
+    <dirset dir="${module.knapsackcp.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.knapsackcp" depends="compile.module.knapsackcp.production,compile.module.knapsackcp.tests" description="Compile module knapsackCP"/>
+  
+  <target name="compile.module.knapsackcp.production" depends="register.custom.compilers" description="Compile module knapsackCP; production classes">
+    <mkdir dir="${knapsackcp.output.dir}"/>
+    <javac2 destdir="${knapsackcp.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.knapsackcp}/javac">
+      <compilerarg line="${compiler.args.knapsackcp}"/>
+      <bootclasspath refid="knapsackcp.module.bootclasspath"/>
+      <classpath refid="knapsackcp.module.production.classpath"/>
+      <src refid="knapsackcp.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.knapsackcp"/>
+    </javac2>
+    
+    <copy todir="${knapsackcp.output.dir}">
+      <fileset dir="${module.knapsackcp.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.knapsackcp.tests" depends="register.custom.compilers,compile.module.knapsackcp.production" description="compile module knapsackCP; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.knapsackcp" description="cleanup module">
+    <delete dir="${knapsackcp.output.dir}"/>
+    <delete dir="${knapsackcp.testoutput.dir}"/>
+  </target>
+</project>

@@ -51,7 +51,8 @@ public class KnapsackBasicCPgoogle extends KnapsackSolver{
 
         solCol.add(vars);
 
-        SearchMonitor[] sm = {obj,solCol};
+        SearchMonitor tl = model.makeTimeLimit(timeLimit * 1000);
+        SearchMonitor[] sm = {obj,solCol, tl};
 
 
         model.solve(db,sm);

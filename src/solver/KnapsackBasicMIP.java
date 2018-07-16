@@ -28,9 +28,16 @@ public class KnapsackBasicMIP extends KnapsackSolver{
             objective.setCoefficient(occurences[j], cost[j]);
         }
         objective.setMaximization();
-        final MPSolver.ResultStatus resultStatus = solver.solve();
-        optimalValue = (int) solver.objective().value();
 
+        solver.setTimeLimit(timeLimit * 1000);
+        final MPSolver.ResultStatus resultStatus = solver.solve();
+
+
+        if (solver.solve() == MPSolver.ResultStatus.OPTIMAL) {
+            optimalValue = (int) solver.objective().value();
+        } else {
+            optimalValue = -1;
+        }
 //        System.out.println("Iterations value = " + solver.iterations());
 //        System.out.println("Contrints value = " + solver.numConstraints());
 //        System.out.println("Var value = " + solver.numVariables());

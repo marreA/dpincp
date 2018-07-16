@@ -58,8 +58,13 @@ public class KnapsackDPencodedMIP extends KnapsackSolver{
             }
         }
         objective.setMaximization();
-        solver.solve();
-        optimalValue = (int) solver.objective().value();
+        solver.setTimeLimit(timeLimit * 1000);
+
+        if (solver.solve() == MPSolver.ResultStatus.OPTIMAL) {
+            optimalValue = (int) solver.objective().value();
+        } else {
+            optimalValue = -1;
+        }
 
 //        System.out.println("Iterations value = " + solver.iterations());
 //        System.out.println("Contrints value = " + solver.numConstraints());

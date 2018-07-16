@@ -1,5 +1,6 @@
 package solver;
 
+import com.google.ortools.constraintsolver.SearchMonitor;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -29,6 +30,7 @@ public class KnapsackBasicCP extends KnapsackSolver{
 
         model.scalar(occurences, weight, "<=", volume).post();
         model.scalar(occurences, cost, "=", objective).post();
+
 
         Solver solver = model.getSolver();
         Solution solution = solver.findOptimalSolution(objective, true);

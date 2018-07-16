@@ -64,10 +64,6 @@ public class KnapsackCPandDP extends KnapsackSolver{
             //System.out.println(solution.toString());
         }
         optimalValue = objective.getValue();
-//        System.out.println("COunt " +count);
-//        estimatedTime = System.nanoTime() - startTime;
-//        System.out.println("Time: " + estimatedTime  / 1000000 +"\n");
-
     }
 
     private void variableCreation(int item, int usedVolume) {

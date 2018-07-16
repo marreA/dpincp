@@ -6,6 +6,9 @@ public abstract class KnapsackSolver {
     protected int[] weight;
     protected int[] cost;
     protected int volume;
+
+
+    protected int timeLimit;
     protected int optimalValue;
     protected int[] sol;
     protected String name;
@@ -65,6 +68,13 @@ public abstract class KnapsackSolver {
     }
 
 
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
 
 
 }
