@@ -33,6 +33,7 @@ public class KnapsackBasicCP extends KnapsackSolver{
 
 
         Solver solver = model.getSolver();
+        solver.limitTime(timeLimit);
         Solution solution = solver.findOptimalSolution(objective, true);
 //        if(solution != null){
 //            System.out.println(solution.toString());
