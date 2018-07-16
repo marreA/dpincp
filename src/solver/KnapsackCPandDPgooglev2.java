@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class KnapsackCPandDPgooglev2 extends KnapsackSolver{
     static { System.loadLibrary("jniortools"); }
 
-    Solver model = new Solver("CPScheduler");
+    Solver model;
     int count = 0;
     private ArrayList<IntVar> list = new ArrayList<>();
     private IntVar K[][];
@@ -20,6 +20,8 @@ public class KnapsackCPandDPgooglev2 extends KnapsackSolver{
     }
 
     public void solve(int[] w, int[] c, int v) {
+        model  = new Solver("CPScheduler");
+
         weight = w;
         cost = c;
         volume = v;
@@ -85,6 +87,7 @@ public class KnapsackCPandDPgooglev2 extends KnapsackSolver{
             optimalValue = -1;
         }
         model.endSearch();
+        model.delete();
 
 //        System.out.println("COunt " +count);
 //        estimatedTime = System.nanoTime() - startTime;

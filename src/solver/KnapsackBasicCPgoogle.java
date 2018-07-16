@@ -65,6 +65,7 @@ public class KnapsackBasicCPgoogle extends KnapsackSolver{
         optimalValue = (int) bestSol.value(o);
 
         model.endSearch();
+        model.delete();
 
     }
 

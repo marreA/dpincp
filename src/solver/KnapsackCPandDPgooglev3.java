@@ -10,7 +10,7 @@ import java.util.Comparator;
 public class KnapsackCPandDPgooglev3 extends KnapsackSolver{
     static { System.loadLibrary("jniortools"); }
 
-    Solver model = new Solver("CPScheduler");
+    Solver model;
     int count = 0;
     private ArrayList<IntVar> list = new ArrayList<>();
     private IntVar K[][];
@@ -36,6 +36,7 @@ public class KnapsackCPandDPgooglev3 extends KnapsackSolver{
             weight[i] = w[idxs[i]];
             cost[i] = c[idxs[i]];
         }
+        model  = new Solver("CPScheduler");
 
         volume = v;
 
@@ -101,6 +102,7 @@ public class KnapsackCPandDPgooglev3 extends KnapsackSolver{
         }
 
         model.endSearch();
+//        model.delete();
 
 //        System.out.println("COunt " +count);
 //        estimatedTime = System.nanoTime() - startTime;

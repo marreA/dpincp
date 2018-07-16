@@ -11,7 +11,7 @@ public class main {
     //Constants
     public static void main(String[] args) throws IOException {
 
-        //args = new String[]{"correlated", "15", "5000", "20", "10", "CPgoogle", "MIP", "DP", "DPinCPgoogle", "DPinCPgooglev3"};
+        args = new String[]{"correlated", "15", "5000", "20", "10", "CPgoogle", "MIP", "DP", "DPinCPgoogle", "DPinCPgooglev3"};
         InstanceGenerator benchmark = new StronglyCorrelated();;
         switch(args[0]) {
             case "correlated" :

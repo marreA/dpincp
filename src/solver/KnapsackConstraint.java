@@ -31,9 +31,9 @@ public class KnapsackConstraint extends KnapsackSolver{
 
         Solver solver = model.getSolver();
         Solution solution = solver.findOptimalSolution(objective, true);
-        if(solution != null){
-            System.out.println(solution.toString());
-        }
+//        if(solution != null){
+//            System.out.println(solution.toString());
+//        }
         optimalValue = objective.getValue();
 
         for (int j = 0; j < size; j++) {
