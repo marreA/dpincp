@@ -3,33 +3,56 @@ package solver;
 import com.google.ortools.constraintsolver.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 
-public class KnapsackCPandDPgoogle extends KnapsackSolver{
+public class BinaryKnapsackCPandDPgooglev3 extends KnapsackSolver {
     static { System.loadLibrary("jniortools"); }
 
     Solver model;
     int count = 0;
     private ArrayList<IntVar> list = new ArrayList<>();
-    private IntVar K[][] ;
+    private IntVar K[][];
+    private int fill[] = new int[size];
     private boolean flag[][];
-    public KnapsackCPandDPgoogle(int size) {
+    public BinaryKnapsackCPandDPgooglev3(int size) {
             super(size);
-            this.name = "DP encoded in CP Google";
+            this.name = "DP encoded in CP Google with added node removal and sorting";
     }
 
     public void solve(int[] w, int[] c, int v) {
+
+        Integer[] idxs = new Integer[w.length];
+        for(int i = 0; i < size; i++) idxs[i] = i;
+        Arrays.sort(idxs, new Comparator<Integer>(){
+            public int compare(Integer o1, Integer o2){
+                return Integer.compare(w[o2], w[o1]);
+            }
+        });
+        weight = new int[size];
+        cost = new int[size];
+        for(int i = 0; i < size; i++){
+            weight[i] = w[idxs[i]];
+            cost[i] = c[idxs[i]];
+        }
         model  = new Solver("CPScheduler");
-        weight = w;
-        cost = c;
+
         volume = v;
+
         K = new IntVar[size][volume +1];
         flag = new boolean[size][volume+1];
         //        long startTime = System.nanoTime();
 
-        variableCreation(0,0);
 //        long estimatedTime = System.nanoTime() - startTime;
 //        System.out.println("Time: " + estimatedTime  / 1000000 +"\n");
+        fill[size-1] = Math.max(volume - weight[size - 1], 0);
+        for (int i = size -2; i >= 0; i--)
+        {
+            fill[i] = Math.max(fill[i+1] - weight[i],0);
+        }
+
+        variableCreation(0,0);
 
 
         for (int i = 0; i < size -1; i++) {
@@ -40,14 +63,18 @@ public class KnapsackCPandDPgoogle extends KnapsackSolver{
                         //model.allEqual(K[i][j],K[i+1][j]).post();
                         model.addConstraint(model.makeEquality(K[i][j],K[i+1][j]));
                     } else {
-                        model.addConstraint(model.makeEquality(K[i][j],
-                                model.makeMax(K[i+1][j], model.makeSum(K[i+1][j+weight[i]], cost[i]))));
+                        if (j >= fill[i]) {
+                            model.addConstraint(model.makeEquality(K[i][j],
+                                    model.makeMax(K[i + 1][j], model.makeSum(K[i + 1][j + weight[i]], cost[i]))));
+                        } else {
+                            model.addConstraint(model.makeEquality(K[i][j],model.makeSum(K[i + 1][j + weight[i]], cost[i])));
+                        }
+
 
                     }
                 }
             }
         }
-
 
         IntVar vars[] = new IntVar[list.size()];
         vars = list.toArray(vars);
@@ -57,20 +84,23 @@ public class KnapsackCPandDPgoogle extends KnapsackSolver{
 
 
         solCol.add(K[0][0]);
+
+
         SearchMonitor tl = model.makeTimeLimit(timeLimit * 1000);
         SearchMonitor[] sm = {solCol, tl};
 
         model.newSearch(db,sm);
-
         model.nextSolution();
 
 //        System.out.println(K[0][0].value());
+
 
         if(K[0][0].bound()) {
             optimalValue = (int) K[0][0].value();
         } else {
             optimalValue = -1;
         }
+
         model.endSearch();
 //        model.delete();
 
@@ -104,7 +134,9 @@ public class KnapsackCPandDPgoogle extends KnapsackSolver{
         K[item][usedVolume] = model.makeIntVar(0,50000, "C[" + item + "][" + usedVolume + "]");
         count++;
         list.add(K[item][usedVolume]);
-        variableCreation(item + 1, usedVolume);
+        if (usedVolume >= fill[item] ) {
+            variableCreation(item + 1, usedVolume);
+        }
 
         if (!(usedVolume + weight[item] > volume )) {
             variableCreation(item+1, usedVolume + weight[item]);

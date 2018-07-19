@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Developed with dictionary, useful to compare the dimension problem
-public class KnapsackDPv2dictionary extends KnapsackSolver{
+public class BinaryKnapsackDPv2Dictionary extends KnapsackSolver {
     private Map<Pair<Integer, Integer>, Integer> dictionary = new HashMap<Pair<Integer, Integer>, Integer>();
-    public KnapsackDPv2dictionary(int size){
+    public BinaryKnapsackDPv2Dictionary(int size){
         super(size);
         this.name = "DP with dictionary";
     }

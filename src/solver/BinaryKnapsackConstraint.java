@@ -1,16 +1,13 @@
 package solver;
 
-import org.chocosolver.solver.Model;
-import org.chocosolver.solver.Solution;
-import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.variables.IntVar;
-
+import org.chocosolver.solver.*;
+import org.chocosolver.solver.variables.*;
 import java.util.stream.IntStream;
 
-public class KnapsackConstraint extends KnapsackSolver {
+public class BinaryKnapsackConstraint extends KnapsackSolver {
 
 
-    public KnapsackConstraint(int size){
+    public BinaryKnapsackConstraint(int size){
         super(size);
         this.name = "Choco constraint";
     }

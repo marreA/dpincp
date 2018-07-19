@@ -7,6 +7,25 @@ public abstract class KnapsackSolver {
     protected int[] cost;
     protected int volume;
 
+    public int[] getMinVal() {
+        return minVal;
+    }
+
+    public void setMinVal(int[] minVal) {
+        this.minVal = minVal;
+    }
+
+    public int[] getMaxVal() {
+        return maxVal;
+    }
+
+    public void setMaxVal(int[] maxVal) {
+        this.maxVal = maxVal;
+    }
+
+    protected int[] minVal;
+    protected int[] maxVal;
+
 
     protected int timeLimit;
     protected int optimalValue;

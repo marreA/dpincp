@@ -5,7 +5,7 @@ import com.google.ortools.constraintsolver.*;
 import java.util.ArrayList;
 
 
-public class KnapsackCPandDPgooglev2 extends KnapsackSolver{
+public class BinaryKnapsackCPandDPgooglev2 extends KnapsackSolver {
     static { System.loadLibrary("jniortools"); }
 
     Solver model;
@@ -14,7 +14,7 @@ public class KnapsackCPandDPgooglev2 extends KnapsackSolver{
     private IntVar K[][];
     private int fill[] = new int[size];
     private boolean flag[][];
-    public KnapsackCPandDPgooglev2(int size) {
+    public BinaryKnapsackCPandDPgooglev2(int size) {
             super(size);
             this.name = "DP encoded in CP Google with added node removal";
     }

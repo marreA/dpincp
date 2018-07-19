@@ -1,6 +1,5 @@
 package solver;
 
-import com.google.ortools.constraintsolver.SearchMonitor;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -8,9 +7,9 @@ import org.chocosolver.solver.variables.IntVar;
 
 import java.util.stream.IntStream;
 
-public class KnapsackBasicCP extends KnapsackSolver{
+public class BinaryKnapsackBasicCP extends KnapsackSolver {
 
-    public KnapsackBasicCP(int size){
+    public BinaryKnapsackBasicCP(int size){
         super(size);
         this.name = "Basic CP";
     }

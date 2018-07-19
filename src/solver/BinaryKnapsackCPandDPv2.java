@@ -9,11 +9,11 @@ import org.chocosolver.solver.variables.IntVar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KnapsackCPandDPv2 extends KnapsackSolver{
+public class BinaryKnapsackCPandDPv2 extends KnapsackSolver {
 
     private Model model =  new Model("DP encoded in CP");
     private Map<Pair<Integer, Integer>, IntVar> dictionary = new HashMap<Pair<Integer, Integer>, IntVar>();
-    public KnapsackCPandDPv2(int size) {
+    public BinaryKnapsackCPandDPv2(int size) {
             super(size);
             this.name = "DP encoded in CP";
     }

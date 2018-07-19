@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Developed with dictionary, useful to compare the dimension problem
-public class KnapsackDPv2 extends KnapsackSolver{
+public class BinaryKnapsackDPv2 extends KnapsackSolver {
 
     private Map<Pair<Integer, Integer>, Integer> dictionary = new HashMap<Pair<Integer, Integer>, Integer>();
-    public KnapsackDPv2(int size) {
+    public BinaryKnapsackDPv2(int size) {
         super(size);
         this.name = "DPv2";
     }

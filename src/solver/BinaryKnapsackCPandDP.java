@@ -7,13 +7,13 @@ import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
 
 
-public class KnapsackCPandDP extends KnapsackSolver{
+public class BinaryKnapsackCPandDP extends KnapsackSolver {
 
     private Model model =  new Model("DP encoded in CP no dictionary");
     int count = 0;
     private IntVar K[][];
     private boolean flag[][];
-    public KnapsackCPandDP(int size) {
+    public BinaryKnapsackCPandDP(int size) {
             super(size);
             this.name = "DP encoded in CP no dictionary";
     }

@@ -3,7 +3,7 @@ package solver;
 import javafx.util.Pair;
 import java.util.*;
 
-public class KnapsackDP extends KnapsackSolver{
+public class KnapsackDP extends KnapsackSolver {
 
     private Map<Pair<Integer, Integer>, Integer> dictionary = new HashMap<Pair<Integer, Integer>, Integer>();
     public KnapsackDP(int size){
@@ -17,46 +17,32 @@ public class KnapsackDP extends KnapsackSolver{
 //        System.out.println(w.length);
 //        System.out.println(c.length);
 //        System.out.println(v);
-        optimalValue = knapSack();
 
-    }
-
-    private int knapSack()
-    {
-        int i, w;
+        int i, j;
         int K[][] = new int[size+1][volume+1];
-
+        for (i = 0; i <= size; i++) {
+            K[i][0] = 0;
+        }
+        for (j = 1; j <= volume; j++) {
+            K[0][j] = 0;
+        }
         // Build table K[][] in bottom up manner
-        for (i = 0; i <= size; i++)
+        for (i = 1; i <= size; i++)
         {
-            for (w = 0; w <= volume; w++)
+            for (j = 1; j <= volume; j++)
             {
-                if (i==0 || w==0)
-                    K[i][w] = 0;
-                else if (weight[i-1] <= w)
-                    K[i][w] = Math.max(cost[i-1] + K[i-1][w-weight[i-1]],  K[i-1][w]);
-                else
-                    K[i][w] = K[i-1][w];
+                int currMax = 0;
+
+                for (int k = minVal[i-1]; k <= Math.min(j / weight[i-1], maxVal[i-1]); k++) {
+                    currMax = Math.max(currMax, K[i - 1][j - weight[i - 1] * k] + (cost[i - 1] * k));
+                }
+                K[i][j] = currMax;
             }
         }
+        optimalValue = K[size][volume];
 
-        return K[size][volume];
     }
-//    private int recursiveCost(int item, int usedVolume) {
-//        if (item >= size)
-//            return 0;
-//        Pair<Integer, Integer> position = new Pair<>(item, usedVolume);
-//        if (dictionary.containsKey(position))
-//            return dictionary.get(position);
-//
-//        if (usedVolume + weight[item] > volume )
-//            return recursiveCost(++item, volume);
-//
-//        int result = Math.max(recursiveCost(++item, volume), recursiveCost(++item, volume + weight[item]) + cost[item] );
-//        dictionary.put(position, result);
-//        System.out.println(position.toString() + "  " + result);
-//
-//        return result;
-//    }
+
+
 
 }

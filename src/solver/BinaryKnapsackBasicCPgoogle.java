@@ -1,11 +1,20 @@
 package solver;
 
-import com.google.ortools.constraintsolver.*;
+import com.google.ortools.constraintsolver.DecisionBuilder;
+import com.google.ortools.constraintsolver.IntVar;
+import com.google.ortools.constraintsolver.Assignment;
+import com.google.ortools.constraintsolver.Solver;
+import com.google.ortools.constraintsolver.SolutionCollector;
+import com.google.ortools.constraintsolver.OptimizeVar;
+import com.google.ortools.constraintsolver.SearchMonitor;
 
-public class KnapsackBasicCPgoogle extends KnapsackSolver {
+
+import java.util.stream.IntStream;
+
+public class BinaryKnapsackBasicCPgoogle extends KnapsackSolver {
     static { System.loadLibrary("jniortools"); }
 
-    public KnapsackBasicCPgoogle(int size){
+    public BinaryKnapsackBasicCPgoogle(int size){
         super(size);
         this.name = "Basic CP with google ";
     }
@@ -18,10 +27,10 @@ public class KnapsackBasicCPgoogle extends KnapsackSolver {
 
         IntVar o = model.makeIntVar(0,99999,"Objective");
 
-        IntVar[] occurences = new IntVar[size];
-        for (int i = 0; i < size; i++) {
-            occurences[i] = model.makeIntVar(minVal[i], maxVal[i],"X[" + i +"]" );
-        }
+        IntVar[] occurences = IntStream
+                .range(0,size)
+                .mapToObj(i -> model.makeIntVar(0,1,"X[" + i +"]" ))
+                .toArray(IntVar[]::new);
 
 
         IntVar vars[] = new IntVar[size+1];

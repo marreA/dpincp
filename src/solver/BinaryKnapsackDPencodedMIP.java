@@ -5,18 +5,15 @@ import com.google.ortools.linearsolver.MPObjective;
 import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
 
-import java.util.Arrays;
-
-
-public class KnapsackDPencodedMIP extends KnapsackSolver {
+public class BinaryKnapsackDPencodedMIP extends KnapsackSolver {
 
     static { System.loadLibrary("jniortools");}
 
     MPSolver solver;
 
-
+    boolean flags[][][];
     MPVariable vars[][][];
-    public KnapsackDPencodedMIP(int size) {
+    public BinaryKnapsackDPencodedMIP(int size) {
         super(size);
         this.name = "DP encoded MIP";
     }
@@ -25,12 +22,9 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         weight = w;
         cost = c;
         volume = v;
-        int maxK = Arrays.stream(maxVal).max().getAsInt();
-
-        System.out.println(maxK);
 
         solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
-        vars = new MPVariable[size][volume+1][maxK+1];
+        vars = new MPVariable[size][volume+1][2];
 
         variableCreation(0,0);
 
@@ -38,34 +32,29 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         MPObjective objective = solver.objective();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j <= volume; j++) {
-                for (int k = minVal[i]; k <= maxVal[i]; k++) {
-                    if (vars[i][j][k] != null) {
-                        objective.setCoefficient(vars[i][j][k], k * cost[i]);
-                    }
-                }
+                if (vars[i][j][1] != null)
+                    objective.setCoefficient(vars[i][j][1],cost[i]);
             }
         }
         MPConstraint source = solver.makeConstraint(1,1);
-        for (int i = minVal[0]; i <= maxVal[0]; i++) {
-            source.setCoefficient(vars[0][0][i], 1);
-        }
-
+        source.setCoefficient(vars[0][0][0], 1);
+        source.setCoefficient(vars[0][0][1], 1);
         for (int i = 1; i < size; i++) {
             for (int j = 0; j < volume; j++) {
-                if (vars[i][j][minVal[i]] != null) {
+                if (vars[i][j][0] != null) {
                     MPConstraint cstr = solver.makeConstraint(0,0);
-                    for (int k = minVal[i]; k <= maxVal[i]; k++) {
-                        if (j + weight[i] * k <= volume) {
-                            cstr.setCoefficient(vars[i][j][k],1);
-                        }
-                    }
-                    for (int k = minVal[i-1]; k <= maxVal[i-1]; k++) {
-                        if ((j - weight[i-1] * k >= 0) && (vars[i-1][j - weight[i-1] * k][k] != null)) {
-                            cstr.setCoefficient(vars[i-1][j - weight[i-1] * k][k],-1);
-                        }
-                    }
+                    cstr.setCoefficient(vars[i][j][0],1);
+                    if (vars[i-1][j][0] != null)
+                        cstr.setCoefficient(vars[i-1][j][0],-1);
+
+                    if (j - weight[i-1] >= 0)
+                        cstr.setCoefficient(vars[i-1][j - weight[i-1]][1],-1);
+
+                    if (vars[i][j][1] != null)
+                        cstr.setCoefficient(vars[i][j][1],1);
 
                 }
+
             }
         }
         objective.setMaximization();
@@ -104,14 +93,29 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         if (item == size) {
             return;
         }
-        if (vars[item][usedVolume][minVal[item]] != null)
+        if (vars[item][usedVolume][0] != null)
             return;
 
-        for (int i = minVal[item]; i <= maxVal[item]; i++) {
-            if (usedVolume + weight[item] * i <= volume) {
-                vars[item][usedVolume][i] = solver.makeBoolVar("var[" + item + "][" + usedVolume + "][ " + i + "]");
-                variableCreation(item + 1, usedVolume + weight[item] * i);
-            }
+//        if (item == size -1) {
+//            if (volume - usedVolume > weight[item]) {
+//                K[item][usedVolume] = model.makeIntConst(cost[item], "C[" + item + "][" + usedVolume + "]");
+//                count++;
+//                list.add(K[item][usedVolume]);
+//            } else {
+//                K[item][usedVolume] = model.makeIntConst(0, "C[" + item + "][" + usedVolume + "]");
+//                count++;
+//                list.add(K[item][usedVolume]);
+//            }
+//            return;
+//        }
+
+        vars[item][usedVolume][0] = solver.makeBoolVar("var[" + item + "]["+ usedVolume + "][0]");
+
+        variableCreation(item + 1, usedVolume);
+
+        if (!(usedVolume + weight[item] > volume )) {
+            vars[item][usedVolume][1] = solver.makeBoolVar("var[" + item + "]["+ usedVolume + "][1]");
+            variableCreation(item+1, usedVolume + weight[item]);
         }
 
     }

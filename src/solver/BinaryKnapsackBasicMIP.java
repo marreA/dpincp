@@ -1,15 +1,12 @@
 package solver;
 
-import com.google.ortools.linearsolver.MPConstraint;
-import com.google.ortools.linearsolver.MPObjective;
-import com.google.ortools.linearsolver.MPSolver;
-import com.google.ortools.linearsolver.MPVariable;
+import com.google.ortools.linearsolver.*;
 
-public class KnapsackBasicMIP extends KnapsackSolver {
+public class BinaryKnapsackBasicMIP extends KnapsackSolver {
 
     static { System.loadLibrary("jniortools");}
 
-    public KnapsackBasicMIP(int size) {
+    public BinaryKnapsackBasicMIP(int size) {
         super(size);
         this.name = "basic MIP";
     }
@@ -23,7 +20,7 @@ public class KnapsackBasicMIP extends KnapsackSolver {
         MPVariable[] occurences = new MPVariable[size];
         MPObjective objective = solver.objective();
         for (int j = 0; j < size; j++) {
-            occurences[j] = solver.makeIntVar(minVal[j], maxVal[j],"X_" + j);
+            occurences[j] = solver.makeBoolVar("X_" + j);
         }
         MPConstraint constraint = solver.makeConstraint(0, volume);
         for (int j = 0; j < size; j++) {
