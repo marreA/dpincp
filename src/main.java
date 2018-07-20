@@ -11,7 +11,7 @@ public class main {
     //Constants
     public static void main(String[] args) throws IOException {
 
-        args = new String[]{"binary", "correlated", "30", "5000", "20", "10", "MIP", "binMIP", "CPgoogle", "DP", "binDP", "DPinCPgoogle" , "binDPinCPgoogle"};
+//        args = new String[]{"binary", "correlated", "200", "5000", "20", "10", "binDP"};
 
 
         InstanceGenerator benchmark = new StronglyCorrelated();
@@ -72,7 +72,7 @@ public class main {
             minVal = benchmark.getMinVal();
             maxVal = benchmark.getMaxVal();
             int v = benchmark.getVolume();
-//            printInstance(benchmark);
+            printInstance(benchmark);
             for (int s = 0; s < solSize; s++) {
 
                 solver = getSolver(solverNames[s], n);
