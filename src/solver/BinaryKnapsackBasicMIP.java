@@ -4,18 +4,24 @@ import com.google.ortools.linearsolver.*;
 
 public class BinaryKnapsackBasicMIP extends KnapsackSolver {
 
+    String MIPSolver = "CBC_MIXED_INTEGER_PROGRAMMING";
     static { System.loadLibrary("jniortools");}
 
     public BinaryKnapsackBasicMIP(int size) {
         super(size);
         this.name = "basic MIP";
     }
+    public void setSolverName(String solverName)
+    {
+        this.MIPSolver = solverName;
+        this.name = "MIP " + solverName;
+    }
 
     public void solve(int[] w, int[] c, int v) {
         weight = w;
         cost = c;
         volume = v;
-        MPSolver solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
+        MPSolver solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf(MIPSolver));
 
         MPVariable[] occurences = new MPVariable[size];
         MPObjective objective = solver.objective();

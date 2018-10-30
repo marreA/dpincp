@@ -1,14 +1,14 @@
 package benchmark;
 import java.util.Random;
-import java.util.Arrays;
 
-public class StronglyCorrelated extends InstanceGenerator {
+public class SubsetSum extends InstanceGenerator {
 
     @Override
     public void generate(int n, int r, double volPerc, int seed) {
         Random rand = new Random(seed);
         size = n;
         int totVol = 0;
+
         weight = new int[n];
         cost = new int[n];
         minVal = new int[n];
@@ -17,7 +17,7 @@ public class StronglyCorrelated extends InstanceGenerator {
         for (int i = 0; i < n; i++){
             weight[i] = rand.nextInt(r) + 1;
             totVol += weight[i];
-            cost[i] = 10  + weight[i];
+            cost[i] = weight[i];
         }
         volume = (int) (totVol * volPerc / 100);
 

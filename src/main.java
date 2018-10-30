@@ -1,5 +1,4 @@
-import benchmark.InstanceGenerator;
-import benchmark.StronglyCorrelated;
+import benchmark.*;
 import solver.*;
 
 import java.io.*;
@@ -11,25 +10,45 @@ public class main {
     //Constants
     public static void main(String[] args) throws IOException {
 
-//        args = new String[]{"binary", "correlated", "200", "5000", "20", "10", "binDP"};
-
+        //args = new String[]{"normal", "correlated", "20", "50" ,"100", "5", "600", "binMIP","binMIPCPLEX", "binDPinMIP","binDPinCPgoogle","binDPinCPgooglev2","binDPinCPgooglev3"};
+        /* Optimisation type: posible values "normal" or "binary"
+         * Type of instances: "uncorrelated", "weaklycorrelated", "stronglycorrelated", "subsetsum"
+         * Number of items: n
+         * Perc volume: from 1 to 100
+         * r maximum weight of the items
+         * Number of repetitions of the experiment
+         * Time limit in  seconds
+         * List of solvers
+         */
 
         InstanceGenerator benchmark = new StronglyCorrelated();
 
         switch (args[1]) {
-            case "correlated":
+            case "weaklycorrelated":
+                benchmark = new WeaklyCorrelated();
+                benchmark.setBinary("binary" == args[0]);
+                break;
+            case "stronglycorrelated":
                 benchmark = new StronglyCorrelated();
                 benchmark.setBinary("binary" == args[0]);
                 break;
-
+            case "uncorrelated":
+                benchmark = new Uncorrelated();
+                benchmark.setBinary("binary" == args[0]);
+                break;
+            case "subsetsum":
+                benchmark = new SubsetSum();
+                benchmark.setBinary("binary" == args[0]);
+                break;
         }
         int[] seeds = {1234, 1989, 290889, 251091, 240664, 190364, 120863, 101295, 31089, 3573113, 30994, 7153, 897332, 174714, 53550, 108109, 1942, 42, 6462, 2001};
         int n = Integer.valueOf(args[2]);
-        int volume = Integer.valueOf(args[3]);
+        int percVolume = Integer.valueOf(args[3]);
         int r = Integer.valueOf(args[4]);
-        int timeLimit = Integer.valueOf(args[5]);
+        int repetitions = Integer.valueOf(args[5]);
+        int timeLimit = Integer.valueOf(args[6]);
 
-        String[] solverNames = Arrays.copyOfRange(args, 6, args.length);
+        String[] solverNames = Arrays.copyOfRange(args, 7, args.length);
 
 
 //        int[] weight = {10, 15, 25, 10};
@@ -56,23 +75,23 @@ public class main {
 
         KnapsackSolver solver;
 
-        long[][] results = new long[r][solSize];
+        long[][] results = new long[repetitions][solSize];
 
         for (int s = 0; s < solSize; s++) {
             System.out.print(solverNames[s] + ",");
 
         }
         System.out.print("\n");
-        for (int i = 0; i < r; i++) {
+        for (int i = 0; i < repetitions; i++) {
 //            System.out.println("Repetition "+ (i + 1) + " of " + r);
             int solVal = 0;
-            benchmark.generate(n, volume, seeds[i]);
+            benchmark.generate(n, r, percVolume, seeds[i]);
             weight = benchmark.getWeight();
             cost = benchmark.getCost();
             minVal = benchmark.getMinVal();
             maxVal = benchmark.getMaxVal();
             int v = benchmark.getVolume();
-            printInstance(benchmark);
+            //printInstance(benchmark);
             for (int s = 0; s < solSize; s++) {
 
                 solver = getSolver(solverNames[s], n);
@@ -84,15 +103,15 @@ public class main {
                 solver.solve(weight, cost, v);
                 long estimatedTime = System.nanoTime() - startTime;
 
-//                System.out.println("Risultato " + solver.getOptimalValue() + "\tTime: " + estimatedTime  / 1000000 +"\n");
+                //System.out.println("Risultato " + solver.getOptimalValue() + "\tTime: " + estimatedTime  / 1000000 +"\n");
 
                 if (s == 0)
                     solVal = solver.getOptimalValue();
                 if (solVal - solver.getOptimalValue() > 10) {// (solvers.get(s).getOptimalValue() == -1 ) {
-                    System.out.print(-estimatedTime / 1000000 + ",");
+                    System.out.print(-estimatedTime / 10000 + ",");
                     results[i][s] = -estimatedTime;
                 } else {
-                    System.out.print(estimatedTime / 1000000 + ",");
+                    System.out.print(estimatedTime / 10000 + ",");
                     results[i][s] = estimatedTime;
                 }
 
@@ -104,14 +123,14 @@ public class main {
         }
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("results_" + args[0] + "_"+ args[1] + "_" + n + "_" + r + "_" + volume + ".csv"), "utf-8"))) {
+                new FileOutputStream("results_" + args[0] + "_"+ args[1] + "_" + n + "_" + r + "_" + percVolume + ".csv"), "utf-8"))) {
             for (int s = 0; s < solSize; s++) {
                 writer.write(solverNames[s] + ",");
             }
             writer.write("\n");
 
 
-            for (int i = 0; i < r; i++) {
+            for (int i = 0; i < repetitions; i++) {
                 for (int s = 0; s < solSize; s++) {
                     writer.write(results[i][s] + ",");
                 }
@@ -123,11 +142,20 @@ public class main {
     }
 
     static KnapsackSolver getSolver(String name, int n) {
+        KnapsackSolver ks;
         switch (name) {
             case "CPgoogle":
                 return new KnapsackBasicCPgoogle(n);
             case "MIP":
                 return new KnapsackBasicMIP(n);
+            case "MIPCPLEX":
+                ks =  new KnapsackBasicMIP(n);
+                ks.setSolverName("CPLEX_MIXED_INTEGER_PROGRAMMING");
+                return ks;
+            case "MIPGUROBI":
+                ks =  new KnapsackBasicMIP(n);
+                ks.setSolverName("GUROBI_MIXED_INTEGER_PROGRAMMING");
+                return ks;
             case "ConstraintChoco":
                 return new KnapsackConstraint(n);
             case "DPinCPgoogle":
@@ -142,6 +170,14 @@ public class main {
                 return new BinaryKnapsackBasicCPgoogle(n);
             case "binMIP":
                 return new BinaryKnapsackBasicMIP(n);
+            case "binMIPCPLEX":
+                ks =  new BinaryKnapsackBasicMIP(n);
+                ks.setSolverName("CPLEX_MIXED_INTEGER_PROGRAMMING");
+                return ks;
+            case "binMIPGUROBI":
+                ks =  new BinaryKnapsackBasicMIP(n);
+                ks.setSolverName("GUROBI_MIXED_INTEGER_PROGRAMMING");
+                return ks;
             case "binConstraintChoco":
                 return new BinaryKnapsackConstraint(n);
             case "binDPinCPchoco":
@@ -160,6 +196,14 @@ public class main {
                 return new BinaryKnapsackDPv2Dictionary(n);
             case "binDPinMIP":
                 return new BinaryKnapsackDPencodedMIP(n);
+            case "binDPinMIPCPLEX":
+                ks =  new BinaryKnapsackDPencodedMIP(n);
+                ks.setSolverName("CPLEX_MIXED_INTEGER_PROGRAMMING");
+                return ks;
+            case "binDPinMIPGUROBI":
+                ks =  new BinaryKnapsackDPencodedMIP(n);
+                ks.setSolverName("GUROBI_MIXED_INTEGER_PROGRAMMING");
+                return ks;
             default:
                 System.out.println("Solver not recognised");
         }

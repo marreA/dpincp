@@ -2,13 +2,14 @@ package benchmark;
 import java.util.Random;
 import java.util.Arrays;
 
-public class StronglyCorrelated extends InstanceGenerator {
+public class WeaklyCorrelated extends InstanceGenerator {
 
     @Override
     public void generate(int n, int r, double volPerc, int seed) {
         Random rand = new Random(seed);
         size = n;
         int totVol = 0;
+
         weight = new int[n];
         cost = new int[n];
         minVal = new int[n];
@@ -17,7 +18,10 @@ public class StronglyCorrelated extends InstanceGenerator {
         for (int i = 0; i < n; i++){
             weight[i] = rand.nextInt(r) + 1;
             totVol += weight[i];
-            cost[i] = 10  + weight[i];
+            cost[i] = (int) ((rand.nextDouble() * r / 5 - r / 10)  + weight[i]);
+            if (cost[i] < 1)
+                cost[i] = 1;
+
         }
         volume = (int) (totVol * volPerc / 100);
 

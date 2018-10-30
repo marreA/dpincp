@@ -8,14 +8,22 @@ import com.google.ortools.linearsolver.MPVariable;
 public class BinaryKnapsackDPencodedMIP extends KnapsackSolver {
 
     static { System.loadLibrary("jniortools");}
+    String MIPSolver = "CBC_MIXED_INTEGER_PROGRAMMING";
 
     MPSolver solver;
 
     boolean flags[][][];
     MPVariable vars[][][];
+
     public BinaryKnapsackDPencodedMIP(int size) {
         super(size);
         this.name = "DP encoded MIP";
+    }
+
+    public void setSolverName(String solverName)
+    {
+        this.MIPSolver = solverName;
+        this.name = "MIP " + solverName;
     }
 
     public void solve(int[] w, int[] c, int v) {
@@ -23,7 +31,7 @@ public class BinaryKnapsackDPencodedMIP extends KnapsackSolver {
         cost = c;
         volume = v;
 
-        solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
+        solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf(MIPSolver));
         vars = new MPVariable[size][volume+1][2];
 
         variableCreation(0,0);

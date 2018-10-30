@@ -2,8 +2,8 @@ package benchmark;
 
 
 public abstract class InstanceGenerator {
-    protected int weight[];
-    protected int cost[];
+    protected int[] weight;
+    protected int[] cost;
     protected int volume;
     protected int[] minVal;
     protected int[] maxVal;
@@ -52,6 +52,6 @@ public abstract class InstanceGenerator {
     }
 
 
-    public abstract void generate(int n, int vol, int seed);
+    public abstract void generate(int n, int r, double volPerc, int seed);
 
 }

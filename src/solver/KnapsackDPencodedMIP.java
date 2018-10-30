@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class KnapsackDPencodedMIP extends KnapsackSolver {
 
     static { System.loadLibrary("jniortools");}
+    String MIPSolver = "CBC_MIXED_INTEGER_PROGRAMMING";
 
     MPSolver solver;
 
@@ -20,6 +21,11 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         super(size);
         this.name = "DP encoded MIP";
     }
+    public void setSolverName(String solverName)
+    {
+        this.MIPSolver = solverName;
+        this.name = "MIP " + solverName;
+    }
 
     public void solve(int[] w, int[] c, int v) {
         weight = w;
@@ -27,9 +33,8 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         volume = v;
         int maxK = Arrays.stream(maxVal).max().getAsInt();
 
-        System.out.println(maxK);
 
-        solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
+        MPSolver solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf(MIPSolver));
         vars = new MPVariable[size][volume+1][maxK+1];
 
         variableCreation(0,0);

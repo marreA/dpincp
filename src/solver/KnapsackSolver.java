@@ -26,6 +26,7 @@ public abstract class KnapsackSolver {
     protected int[] minVal;
     protected int[] maxVal;
 
+    public void setSolverName(String solverName) {}
 
     protected int timeLimit;
     protected int optimalValue;
