@@ -88,6 +88,7 @@ public class BinaryKnapsackCPandDPgooglev2 extends KnapsackSolver {
         }
         model.endSearch();
         model.delete();
+        model = null;
 
 //        System.out.println("COunt " +count);
 //        estimatedTime = System.nanoTime() - startTime;

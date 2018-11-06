@@ -5,7 +5,7 @@ import com.google.ortools.constraintsolver.*;
 import java.util.ArrayList;
 
 
-public class BinaryKnapsackCPandDPgoogle extends KnapsackSolver {
+public class KnapsackCPandDPgoogle extends KnapsackSolver{
     static { System.loadLibrary("jniortools"); }
 
     Solver model;
@@ -13,7 +13,7 @@ public class BinaryKnapsackCPandDPgoogle extends KnapsackSolver {
     private ArrayList<IntVar> list = new ArrayList<>();
     private IntVar K[][] ;
     private boolean flag[][];
-    public BinaryKnapsackCPandDPgoogle(int size) {
+    public KnapsackCPandDPgoogle(int size) {
             super(size);
             this.name = "DP encoded in CP Google";
     }
@@ -28,6 +28,9 @@ public class BinaryKnapsackCPandDPgoogle extends KnapsackSolver {
         //        long startTime = System.nanoTime();
 
         variableCreation(0,0);
+//        long estimatedTime = System.nanoTime() - startTime;
+//        System.out.println("Time: " + estimatedTime  / 1000000 +"\n");
+
 
         for (int i = 0; i < size -1; i++) {
             for (int j = 0; j < volume + 1; j++) {
@@ -69,8 +72,7 @@ public class BinaryKnapsackCPandDPgoogle extends KnapsackSolver {
             optimalValue = -1;
         }
         model.endSearch();
-        model.delete();
-        model = null;
+//        model.delete();
 
 //        System.out.println("COunt " +count);
 //        estimatedTime = System.nanoTime() - startTime;
@@ -89,15 +91,18 @@ public class BinaryKnapsackCPandDPgoogle extends KnapsackSolver {
         if (item == size -1) {
             if (volume - usedVolume > weight[item]) {
                 K[item][usedVolume] = model.makeIntConst(cost[item], "C[" + item + "][" + usedVolume + "]");
+                count++;
                 list.add(K[item][usedVolume]);
             } else {
                 K[item][usedVolume] = model.makeIntConst(0, "C[" + item + "][" + usedVolume + "]");
+                count++;
                 list.add(K[item][usedVolume]);
             }
             return;
         }
 
         K[item][usedVolume] = model.makeIntVar(0,50000, "C[" + item + "][" + usedVolume + "]");
+        count++;
         list.add(K[item][usedVolume]);
         variableCreation(item + 1, usedVolume);
 

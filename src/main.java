@@ -10,7 +10,9 @@ public class main {
     //Constants
     public static void main(String[] args) throws IOException {
 
-        //args = new String[]{"normal", "correlated", "20", "50" ,"100", "5", "600", "binMIP","binMIPCPLEX", "binDPinMIP","binDPinCPgoogle","binDPinCPgooglev2","binDPinCPgooglev3"};
+        //String values = "binary weaklycorrelated 175 50 100 10 600 binDP binDPv2 binCPchoco binMIP binMIPCPLEX binMIPGUROBI binConstraintChoco binDPinCPgoogle binDPinCPgooglev2 binDPinCPgooglev3 binDPinMIPCPLEX";
+        //values = "binary weaklycorrelated 175 50 100 10 600 binDP binDPv2 binCPchoco binMIP binMIPCPLEX binDPinCPgooglev3";
+        //args = values.split(" ");
         /* Optimisation type: posible values "normal" or "binary"
          * Type of instances: "uncorrelated", "weaklycorrelated", "stronglycorrelated", "subsetsum"
          * Number of items: n
@@ -114,8 +116,11 @@ public class main {
                     System.out.print(estimatedTime / 10000 + ",");
                     results[i][s] = estimatedTime;
                 }
-
-
+                solver = null;
+                Runtime.getRuntime().runFinalization();
+                Runtime.getRuntime().gc();
+                System.gc();
+                System.gc();
             }
             System.out.print("\n");
 

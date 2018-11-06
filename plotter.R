@@ -1,9 +1,9 @@
-dimensions <- c(10,15,20,25,35,50,75)
+dimensions <- c(5,10,25,35,50,75,100,125,150,175,200,250,300,350)
 
 #dimensions <- c(5,10,15,20,25,35,50,75,100,125,150,175,200,225,250,300,350)
 
-dim = 30
-mydata = read.csv(paste("~/dpincp/results_normal_correlated_", dimensions[1], "_10_5000.csv", sep = ""))
+dim = 4
+mydata = read.csv(paste("~/dpincp/results/weakly_correlated/results_binary_weaklycorrelated_", dimensions[1], "_100_50.csv", sep = ""))
 names = colnames(mydata)
 names = names[-length(names)]
 dnames = lapply(dimensions,toString.default)
@@ -15,7 +15,7 @@ rownames(results) = dnames
 ndim = length(dimensions)
 
 for (dim in dimensions) {
-  mydata = read.csv(paste("~/dpincp/results_normal_correlated_", dim, "_10_5000.csv", sep = ""))
+  mydata = read.csv(paste("~/dpincp/results/weakly_correlated/results_binary_weaklycorrelated_", dim, "_100_50.csv", sep = ""))
   mydata = apply(mydata,2,abs)
   for (i in 1:(ncol(mydata)-1)) {
     n = colnames(mydata)[i]
@@ -26,13 +26,13 @@ for (dim in dimensions) {
 }
 
 
-results = results[,-4]
-colnames(results) <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "MIP flow formulation")
-names <-  c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "MIP flow formulation")
+results = results[,-c(2,3,5,6,7)]
+#colnames(results) <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "MIP flow formulation")
+#names <-  c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "MIP flow formulation")
 # Create Line Chart
-results = results[,-3]
-colnames(results) <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "MIP flow formulation")
-names <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "MIP flow formulation")
+#results = results[,-3]
+#colnames(results) <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "MIP flow formulation")
+#names <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "MIP flow formulation")
 #pdf("~/plot.pdf")
 
 # get the range for the x and y axis 
