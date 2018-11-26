@@ -34,7 +34,7 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         int maxK = Arrays.stream(maxVal).max().getAsInt();
 
 
-        MPSolver solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf(MIPSolver));
+        solver = new MPSolver("MIPSolver", MPSolver.OptimizationProblemType.valueOf(MIPSolver));
         vars = new MPVariable[size][volume+1][maxK+1];
 
         variableCreation(0,0);
@@ -112,8 +112,10 @@ public class KnapsackDPencodedMIP extends KnapsackSolver {
         if (vars[item][usedVolume][minVal[item]] != null)
             return;
 
+
         for (int i = minVal[item]; i <= maxVal[item]; i++) {
             if (usedVolume + weight[item] * i <= volume) {
+
                 vars[item][usedVolume][i] = solver.makeBoolVar("var[" + item + "][" + usedVolume + "][ " + i + "]");
                 variableCreation(item + 1, usedVolume + weight[item] * i);
             }

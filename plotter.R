@@ -1,9 +1,9 @@
-dimensions <- c(5,10,25,35,50,75,100,125,150,175,200,250,300,350)
+#dimensions <- c(10,25,35,50,75,100,125,150)#uncorrelated
 
-#dimensions <- c(5,10,15,20,25,35,50,75,100,125,150,175,200,225,250,300,350)
+dimensions <- c(5,10,25,35,50,75,100,125,150,175,200,250,300,350,400,450,500,550)#subset sum, missing gurobi 250
 
 dim = 4
-mydata = read.csv(paste("~/dpincp/results/weakly_correlated/results_binary_weaklycorrelated_", dimensions[1], "_100_50.csv", sep = ""))
+mydata = read.csv(paste("~/dpincp/results/results_binary_subsetsum_", dimensions[1], "_100_50.csv", sep = ""))
 names = colnames(mydata)
 names = names[-length(names)]
 dnames = lapply(dimensions,toString.default)
@@ -15,7 +15,7 @@ rownames(results) = dnames
 ndim = length(dimensions)
 
 for (dim in dimensions) {
-  mydata = read.csv(paste("~/dpincp/results/weakly_correlated/results_binary_weaklycorrelated_", dim, "_100_50.csv", sep = ""))
+  mydata = read.csv(paste("~/dpincp/results/results_binary_subsetsum_", dim, "_100_50.csv", sep = ""))
   mydata = apply(mydata,2,abs)
   for (i in 1:(ncol(mydata)-1)) {
     n = colnames(mydata)[i]
@@ -26,9 +26,12 @@ for (dim in dimensions) {
 }
 
 
-results = results[,-c(2,3,5,6,7)]
+results = results[,-c(2,3,5,6,7,12)]
+#names = colnames(results)
+
+
 #colnames(results) <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "MIP flow formulation")
-#names <-  c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "MIP flow formulation")
+names <-  c("Normal DP", "Naive in CP", "Global constraint", "DPE", "DPE + sr", "DPE + sr + sorting", "Flow model CPLEX", "Flow model GUROBI")
 # Create Line Chart
 #results = results[,-3]
 #colnames(results) <- c("Normal DP", "Naive in CP", "Global constraint", "DPE", "MIP flow formulation")
@@ -57,5 +60,5 @@ for (i in 1:length(names)) {
 #title(ds)
 
 # add a legend 
-legend(xrange[2]*0.4, yrange[1]+ 1*(yrange[2]-yrange[1]), names, cex=0.8, col=colors,pch=plotchar, lty=linetype)
+legend(xrange[2]*0.05, yrange[1]+ 1*(yrange[2]-yrange[1]), names, cex=0.8, col=colors,pch=plotchar, lty=linetype)
 

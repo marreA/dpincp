@@ -10,9 +10,11 @@ public class main {
     //Constants
     public static void main(String[] args) throws IOException {
 
-        //String values = "binary weaklycorrelated 175 50 100 10 600 binDP binDPv2 binCPchoco binMIP binMIPCPLEX binMIPGUROBI binConstraintChoco binDPinCPgoogle binDPinCPgooglev2 binDPinCPgooglev3 binDPinMIPCPLEX";
-        //values = "binary weaklycorrelated 175 50 100 10 600 binDP binDPv2 binCPchoco binMIP binMIPCPLEX binDPinCPgooglev3";
-        //args = values.split(" ");
+
+        /*
+        String values = "binary weaklycorrelated 175 50 100 10 600 binDP binDPv2 binCPchoco binMIP binMIPCPLEX binMIPGUROBI binConstraintChoco binDPinCPgoogle binDPinCPgooglev2 binDPinCPgooglev3 binDPinMIPCPLEX";
+        values = "normal subsetsum 5 50 100 10 600 DP CPgoogle MIP MIPCPLEX ConstraintChoco DPinCPgoogle DPinMIP DPinMIPCPLEX DPinMIPGUROBI";
+        args = values.split(" ");
         /* Optimisation type: posible values "normal" or "binary"
          * Type of instances: "uncorrelated", "weaklycorrelated", "stronglycorrelated", "subsetsum"
          * Number of items: n
@@ -169,6 +171,14 @@ public class main {
                 return new KnapsackDP(n);
             case "DPinMIP":
                 return new KnapsackDPencodedMIP(n);
+            case "DPinMIPCPLEX":
+                ks =  new KnapsackDPencodedMIP(n);
+                ks.setSolverName("CPLEX_MIXED_INTEGER_PROGRAMMING");
+                return ks;
+            case "DPinMIPGUROBI":
+                ks =  new KnapsackDPencodedMIP(n);
+                ks.setSolverName("GUROBI_MIXED_INTEGER_PROGRAMMING");
+                return ks;
             case "binCPchoco":
                 return new BinaryKnapsackBasicCP(n);
             case "binCPgoogle":
