@@ -1,7 +1,9 @@
 package solver;
 
 import javafx.util.Pair;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BinaryKnapsackDP extends KnapsackSolver {
 

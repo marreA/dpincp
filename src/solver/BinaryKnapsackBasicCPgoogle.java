@@ -1,13 +1,6 @@
 package solver;
 
-import com.google.ortools.constraintsolver.DecisionBuilder;
-import com.google.ortools.constraintsolver.IntVar;
-import com.google.ortools.constraintsolver.Assignment;
-import com.google.ortools.constraintsolver.Solver;
-import com.google.ortools.constraintsolver.SolutionCollector;
-import com.google.ortools.constraintsolver.OptimizeVar;
-import com.google.ortools.constraintsolver.SearchMonitor;
-
+import com.google.ortools.constraintsolver.*;
 
 import java.util.stream.IntStream;
 
