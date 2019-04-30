@@ -26,23 +26,23 @@ public class main {
          */
 
         InstanceGenerator benchmark = new StronglyCorrelated();
-
+        System.out.println(args[0]);
         switch (args[1]) {
             case "weaklycorrelated":
                 benchmark = new WeaklyCorrelated();
-                benchmark.setBinary("binary" == args[0]);
+                benchmark.setBinary("binary".equals(args[0]));
                 break;
             case "stronglycorrelated":
                 benchmark = new StronglyCorrelated();
-                benchmark.setBinary("binary" == args[0]);
+                benchmark.setBinary("binary".equals(args[0]));
                 break;
             case "uncorrelated":
                 benchmark = new Uncorrelated();
-                benchmark.setBinary("binary" == args[0]);
+                benchmark.setBinary("binary".equals(args[0]));
                 break;
             case "subsetsum":
                 benchmark = new SubsetSum();
-                benchmark.setBinary("binary" == args[0]);
+                benchmark.setBinary("binary".equals(args[0]));
                 break;
         }
         int[] seeds = {1234, 1989, 290889, 251091, 240664, 190364, 120863, 101295, 31089, 3573113, 30994, 7153, 897332, 174714, 53550, 108109, 1942, 42, 6462, 2001};
